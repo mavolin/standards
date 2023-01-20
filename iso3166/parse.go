@@ -25,9 +25,9 @@ func ParseAlpha2(s string) (Alpha2Code, error) {
 	return c, nil
 }
 
-// ValidateAlpha2 validates an ISO 3166-1 alpha-2 code, according to the
+// IsValidAlpha2 validates an ISO 3166-1 alpha-2 code, according to the
 // rules laid out in [ParseAlpha2].
-func ValidateAlpha2(s string) bool {
+func IsValidAlpha2(s string) bool {
 	_, err := ParseAlpha2(s)
 	return err == nil
 }

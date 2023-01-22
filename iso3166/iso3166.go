@@ -2,7 +2,7 @@ package iso3166
 
 import "encoding"
 
-//go:generate go run github.com/mavolin/miscnums/tools/codegen/iso3166-1
+//go:generate go run github.com/mavolin/standards/tools/codegen/iso3166-1
 
 // ============================================================================
 // Alpha2Code

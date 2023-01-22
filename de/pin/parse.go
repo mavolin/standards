@@ -150,3 +150,8 @@ func nthDigit(num uint8, n int) uint8 {
 func digitSum(n uint8) uint8 {
 	return n/100 + n/10 + n%10
 }
+
+func IsValid(s string) bool {
+	_, err := Parse(s)
+	return err == nil
+}

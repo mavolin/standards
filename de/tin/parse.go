@@ -143,8 +143,8 @@ func calcCheckDigit(n uint64) uint8 {
 
 // nthDigit returns the nth digit of n, where n=1 would return the rightmost
 // digit.
-func nthDigit(n uint64, i int) uint8 {
-	return uint8((n / (uint64)(math.Pow10(i-1))) % 10)
+func nthDigit(num uint64, n int) uint8 {
+	return uint8((num / (uint64)(math.Pow10(n-1))) % 10)
 }
 
 // IsValid validates that s represents a syntactically valid German tax id.

@@ -1,0 +1,58 @@
+// Package postalcode provides parsing and validation for German ZIP codes
+// (Postleitzahl).
+package postalcode
+
+import (
+	"encoding"
+	"errors"
+	"regexp"
+)
+
+var ErrSyntax = errors.New("de/postalcode: postal codes must be 5-digit numbers")
+
+// PostalCode represents a German postal code code (Postleitzahl).
+//
+// It is a 5-digit string.
+type PostalCode string
+
+func (c PostalCode) String() string {
+	return string(c)
+}
+
+var _ encoding.TextMarshaler = PostalCode("")
+
+func (c PostalCode) MarshalText() ([]byte, error) {
+	return []byte(c), nil
+}
+
+var _ encoding.TextUnmarshaler = (*PostalCode)(nil)
+
+func (c *PostalCode) UnmarshalText(text []byte) error {
+	parsed, err := Parse(string(text))
+	if err != nil {
+		return err
+	}
+
+	*c = parsed
+	return nil
+}
+
+var postalCodeRegexp = regexp.MustCompile(`\d{5}`)
+
+// Parse parses the passed postal code.
+//
+// If Parse returns without an error, the postal code is considered
+// syntactically valid.
+func Parse(s string) (PostalCode, error) {
+	if !postalCodeRegexp.MatchString(s) {
+		return "", ErrSyntax
+	}
+
+	return PostalCode(s), nil
+}
+
+// IsValid returns true if the postal code is valid.
+func IsValid(s string) bool {
+	_, err := Parse(s)
+	return err == nil
+}

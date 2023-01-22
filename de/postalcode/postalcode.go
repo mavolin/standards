@@ -43,6 +43,11 @@ var postalCodeRegexp = regexp.MustCompile(`\d{5}`)
 //
 // If Parse returns without an error, the postal code is considered
 // syntactically valid.
+//
+// Note that while checking if the postal code actually exists is possible,
+// it is also error-prone, because as soon as a new postal code is assigned,
+// or one is removed, the validation automatically becomes incorrect.
+// Therefore, this package only checks for syntactical validity.
 func Parse(s string) (PostalCode, error) {
 	if !postalCodeRegexp.MatchString(s) {
 		return "", ErrSyntax

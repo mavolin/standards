@@ -19,7 +19,7 @@ func TestParse(t *testing.T) {
 			}
 
 			if pin.String() != c.Expect {
-				t.Errorf("Parse(%q): expected %q, got %q", c, c, pin.String())
+				t.Errorf("Parse(%q): expected %q, got %q", c.In, c.Expect, pin.String())
 			}
 		})
 	}

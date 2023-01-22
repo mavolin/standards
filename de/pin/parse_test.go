@@ -23,7 +23,7 @@ func TestParse(t *testing.T) {
 			}
 
 			if bic.String() != c.Expect {
-				t.Errorf("Parse(%q): expected %q, got %q", c, c, bic.String())
+				t.Errorf("Parse(%q): expected %q, got %q", c.In, c.Expect, bic.String())
 			}
 		})
 	}

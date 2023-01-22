@@ -15,7 +15,7 @@ func TestParse(t *testing.T) {
 		t.Run(c.In, func(t *testing.T) {
 			pin, err := Parse(c.In)
 			if err != nil {
-				t.Errorf("Parse(%q): %s", c, err)
+				t.Errorf("Parse(%q): %s", c.In, err)
 			}
 
 			if pin.String() != c.Expect {

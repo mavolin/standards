@@ -19,7 +19,7 @@ func TestParse(t *testing.T) {
 		t.Run(c.In, func(t *testing.T) {
 			bic, err := Parse(c.In)
 			if err != nil {
-				t.Errorf("Parse(%q): %s", c, err)
+				t.Errorf("Parse(%q): %s", c.In, err)
 			}
 
 			if bic.String() != c.Expect {

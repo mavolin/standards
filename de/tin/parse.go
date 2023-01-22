@@ -32,6 +32,8 @@ func Parse(s string) (TIN, error) {
 	s = strings.ReplaceAll(s, " ", "")
 	s = strings.ReplaceAll(s, "/", "")
 
+	// https://www.zfa.deutsche-rentenversicherung-bund.de/de/Inhalt/public/4_ID/47_Pruefziffernberechnung/001_Pruefziffernberechnung.pdf?__blob=publicationFile&v=2
+
 	// besides the no-0-check, this is also necessary, because ParseUint
 	// also accepts things like hex or octal numbers, or '_' as separators
 	if !tinRegexp.MatchString(s) {

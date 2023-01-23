@@ -161,7 +161,7 @@ func isValidIBAN(s string) bool {
 		c := s[i]
 		if c >= 'A' && c <= 'Z' {
 			toDigit := c - 'A' + 10
-			s = s[:i] + twoDigitToString(uint8(toDigit)) + s[i+1:]
+			s = s[:i] + twoDigitToString(toDigit) + s[i+1:]
 			i++ // we replaced a single character with two, so we need to skip
 		}
 	}

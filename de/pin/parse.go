@@ -122,21 +122,21 @@ func calcCheckDigit(pin PensionInsuranceNumber) uint8 {
 
 	var sum int
 
-	sum += int(digitSum(2 * nthDigit(uint8(pin.AreaCode), 2)))
-	sum += int(digitSum(1 * nthDigit(uint8(pin.AreaCode), 1)))
-	sum += int(digitSum(2 * nthDigit(pin.BirthDay, 2)))
-	sum += int(digitSum(5 * nthDigit(pin.BirthDay, 1)))
-	sum += int(digitSum(7 * nthDigit(pin.BirthMonth, 2)))
-	sum += int(digitSum(1 * nthDigit(pin.BirthMonth, 1)))
-	sum += int(digitSum(2 * nthDigit(pin.BirthYear, 2)))
-	sum += int(digitSum(1 * nthDigit(pin.BirthYear, 1)))
+	sum += int(twoDigitDigitSum(2 * nthDigit(uint8(pin.AreaCode), 2)))
+	sum += int(nthDigit(uint8(pin.AreaCode), 1))
+	sum += int(twoDigitDigitSum(2 * nthDigit(pin.BirthDay, 2)))
+	sum += int(twoDigitDigitSum(5 * nthDigit(pin.BirthDay, 1)))
+	sum += int(twoDigitDigitSum(7 * nthDigit(pin.BirthMonth, 2)))
+	sum += int(nthDigit(pin.BirthMonth, 1))
+	sum += int(twoDigitDigitSum(2 * nthDigit(pin.BirthYear, 2)))
+	sum += int(nthDigit(pin.BirthYear, 1))
 
 	numericLetter := uint8(pin.LastNameLetter - 'A' + 1)
-	sum += int(digitSum(2 * nthDigit(numericLetter, 2)))
-	sum += int(digitSum(1 * nthDigit(numericLetter, 1)))
+	sum += int(twoDigitDigitSum(2 * nthDigit(numericLetter, 2)))
+	sum += int(nthDigit(numericLetter, 1))
 
-	sum += int(digitSum(2 * nthDigit(pin.SerialNumber, 2)))
-	sum += int(digitSum(1 * nthDigit(pin.SerialNumber, 1)))
+	sum += int(twoDigitDigitSum(2 * nthDigit(pin.SerialNumber, 2)))
+	sum += int(nthDigit(pin.SerialNumber, 1))
 
 	return uint8(sum % 10)
 }
@@ -147,8 +147,8 @@ func nthDigit(num uint8, n int) uint8 {
 	return (num / (uint8)(math.Pow10(n-1))) % 10
 }
 
-func digitSum(n uint8) uint8 {
-	return n/100 + n/10 + n%10
+func twoDigitDigitSum(n uint8) uint8 {
+	return n/10 + n%10
 }
 
 func IsValid(s string) bool {

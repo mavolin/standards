@@ -249,7 +249,9 @@ func luhn(s string) int {
 		n := int(s[i] - '0')
 		if i%2 == 0 {
 			n *= 2
-			n = (n / 10) + (n % 10)
+			if n > 9 {
+				n -= 9
+			}
 		}
 
 		sum += uint64(n)

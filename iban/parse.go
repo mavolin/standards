@@ -180,3 +180,8 @@ func twoDigitToString(i uint8) string {
 	//goland:noinspection GoVetIntToStringConversion
 	return string(i/10+'0') + string(i%10+'0')
 }
+
+func IsValid(s string) bool {
+	_, err := Parse(s)
+	return err == nil
+}

@@ -1,0 +1,2 @@
+# use for code generation, not part of the source code
+*.html -linguist-detectable

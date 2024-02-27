@@ -19,10 +19,14 @@ func (c PostalCode) String() string {
 	return string(c)
 }
 
+func (c PostalCode) Compact() string {
+	return string(c)
+}
+
 var _ encoding.TextMarshaler = PostalCode("")
 
 func (c PostalCode) MarshalText() ([]byte, error) {
-	return []byte(c), nil
+	return []byte(c.Compact()), nil
 }
 
 var _ encoding.TextUnmarshaler = (*PostalCode)(nil)

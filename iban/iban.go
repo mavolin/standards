@@ -51,7 +51,7 @@ func (iban IBAN) String() string {
 	sb.Grow(maxLen + maxLen/4 + 1)
 
 	sb.WriteString(iban.CountryCode.Code)
-	sb.WriteString(uint8ToTwoDigitString(iban.Checksum))
+	sb.WriteString(twoDigitStr(int(iban.Checksum)))
 
 	for i := 0; i < len(iban.BBAN); i += 4 {
 		sb.WriteByte(' ')
@@ -67,11 +67,14 @@ func (iban IBAN) String() string {
 	return sb.String()
 }
 
+func (iban IBAN) Compact() string {
+	return iban.CountryCode.Code + twoDigitStr(int(iban.Checksum)) + iban.BBAN
+}
+
 var _ encoding.TextMarshaler = IBAN{}
 
 func (iban IBAN) MarshalText() ([]byte, error) {
-	s := iban.CountryCode.Code + uint8ToTwoDigitString(iban.Checksum) + iban.BBAN
-	return []byte(s), nil
+	return []byte(iban.Compact()), nil
 }
 
 var _ encoding.TextUnmarshaler = (*IBAN)(nil)
@@ -86,6 +89,6 @@ func (iban *IBAN) UnmarshalText(text []byte) error {
 	return nil
 }
 
-func uint8ToTwoDigitString(n uint8) string {
-	return string('0'+n/10) + string('0'+n%10)
+func twoDigitStr(n int) string {
+	return string(rune('0'+n/10)) + string(rune('0'+n%10))
 }

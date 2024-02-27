@@ -44,7 +44,8 @@ type BIC struct {
 Each type implements:
 
 * `String() string` to get the notation pretty-printed
-* `MarshalText() ([]byte, error)` to get the notation in compact form
+* `Compact() string` to get the notation in compact, machine-readable form
+* `MarshalText() ([]byte, error)` same as `Compact`
 * `UnmarshalText([]byte) error` to parse the notation
 
 Additionally, each package provides these two functions:

@@ -67,10 +67,14 @@ func (id HealthInsuranceNumber) String() string {
 	return string(id)
 }
 
+func (id HealthInsuranceNumber) Compact() string {
+	return string(id)
+}
+
 var _ encoding.TextMarshaler = HealthInsuranceNumber("")
 
 func (id HealthInsuranceNumber) MarshalText() ([]byte, error) {
-	return []byte(id.String()), nil
+	return []byte(id.Compact()), nil
 }
 
 var _ encoding.TextUnmarshaler = (*HealthInsuranceNumber)(nil)

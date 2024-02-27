@@ -21,10 +21,14 @@ func (c Alpha2Code) String() string {
 	return c.Code
 }
 
+func (c Alpha2Code) Compact() string {
+	return c.Code
+}
+
 var _ encoding.TextMarshaler = Alpha2Code{}
 
 func (c Alpha2Code) MarshalText() ([]byte, error) {
-	return []byte(c.Code), nil
+	return []byte(c.Compact()), nil
 }
 
 var _ encoding.TextUnmarshaler = (*Alpha2Code)(nil)

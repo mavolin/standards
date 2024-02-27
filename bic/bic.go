@@ -30,10 +30,14 @@ func (bic BIC) String() string {
 	return bic.BusinessPartyPrefix + bic.CountryCode + bic.BusinessPartySuffix + bic.BranchCode
 }
 
+func (bic *BIC) Compact() string {
+	return bic.String()
+}
+
 var _ encoding.TextMarshaler = BIC{}
 
 func (bic BIC) MarshalText() ([]byte, error) {
-	return []byte(bic.String()), nil
+	return []byte(bic.Compact()), nil
 }
 
 var _ encoding.TextUnmarshaler = (*BIC)(nil)

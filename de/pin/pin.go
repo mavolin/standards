@@ -124,7 +124,7 @@ func (pin PensionInsuranceNumber) String() string {
 
 var _ encoding.TextMarshaler = PensionInsuranceNumber{}
 
-// MarshalText implements encoding.TextMarshaler.
+// Compact renders a compact representation of the pension insurance number.
 //
 // In contrast to String(), MarshalText does not add spaces between the
 // different parts of the pension insurance number.
@@ -132,6 +132,11 @@ var _ encoding.TextMarshaler = PensionInsuranceNumber{}
 // The returned string will have the following format:
 //
 //	AADDMMYYLSSC
+func (pin PensionInsuranceNumber) Compact() string {
+	return fmt.Sprintf("%02d%02d%02d%02d%c%02d%d",
+		pin.AreaCode, pin.BirthDay, pin.BirthMonth, pin.BirthYear, pin.LastNameLetter, pin.SerialNumber, pin.CheckDigit)
+}
+
 func (pin PensionInsuranceNumber) MarshalText() ([]byte, error) {
 	s := fmt.Sprintf("%02d%02d%02d%02d%c%02d%d",
 		pin.AreaCode, pin.BirthDay, pin.BirthMonth, pin.BirthYear, pin.LastNameLetter, pin.SerialNumber, pin.CheckDigit)

@@ -33,12 +33,12 @@ func (id TIN) String() string {
 
 var _ encoding.TextMarshaler = TIN(0)
 
-// MarshalText implements encoding.TextMarshaler.
-//
-// In contrast to String(), it returns the TIN as is, without any formatting.
+func (id TIN) Compact() string {
+	return strconv.FormatUint(uint64(id), 10)
+}
+
 func (id TIN) MarshalText() ([]byte, error) {
-	s := strconv.FormatUint(uint64(id), 10)
-	return []byte(s), nil
+	return []byte(id.Compact()), nil
 }
 
 var _ encoding.TextUnmarshaler = (*TIN)(nil)

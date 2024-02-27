@@ -152,8 +152,6 @@ func isValidIBAN(s string) bool {
 	// https://en.wikipedia.org/wiki/Modulo_operation
 
 	// 1. Move the four initial characters to the end of the string.
-
-	// 1. Move the four initial characters to the end of the string.
 	s = s[4:] + s[:4]
 
 	// 2. Replace each letter in the string with two digits, thereby expanding the string, where A = 10, B = 11, ..., Z = 35.

@@ -41,12 +41,12 @@ var checksumFuncs = map[iso3166.Alpha2Code]func(IBAN) bool{
 		if check == 0 {
 			check = 97
 		}
-		return iban.NationalChecksum == strconv.Itoa(int(check))
+		return iban.NationalChecksum == twoDigitStr(int(check))
 	},
 	// https://en.wikipedia.org/wiki/International_Bank_Account_Number#National_check_digits
 	iso3166.BA: func(iban IBAN) bool {
 		check := iso7064Mod97_10(iban.BankCode + iban.BranchCode + iban.AccountNumber)
-		return iban.NationalChecksum == uint8ToTwoDigitString(uint8(check))
+		return iban.NationalChecksum == twoDigitStr(check)
 	},
 	// https://en.wikipedia.org/wiki/International_Bank_Account_Number#IBAN_formats_by_country
 	iso3166.HR: func(iban IBAN) bool {
@@ -57,7 +57,7 @@ var checksumFuncs = map[iso3166.Alpha2Code]func(IBAN) bool{
 	// Only works w/o appending "00", wiki lists no source.
 	iso3166.TL: func(iban IBAN) bool {
 		check := iso7064Mod97_10(iban.BankCode + iban.AccountNumber)
-		return iban.NationalChecksum == uint8ToTwoDigitString(uint8(check))
+		return iban.NationalChecksum == twoDigitStr(check)
 	},
 	// https://en.wikipedia.org/wiki/International_Bank_Account_Number#IBAN_formats_by_country
 	// https://www.ecbs.org/Download/Tr201v3.9.pdf (page 41)
@@ -108,13 +108,13 @@ var checksumFuncs = map[iso3166.Alpha2Code]func(IBAN) bool{
 	// https://www.ecbs.org/Download/Tr201v3.9.pdf (page 94)
 	iso3166.MK: func(iban IBAN) bool {
 		check := iso7064Mod97_10(iban.BankCode + iban.AccountNumber)
-		return iban.NationalChecksum == strconv.Itoa(check)
+		return iban.NationalChecksum == twoDigitStr(check)
 	},
 	iso3166.MC: france,
 	// https://en.wikipedia.org/wiki/International_Bank_Account_Number#IBAN_formats_by_country
 	iso3166.ME: func(iban IBAN) bool {
 		check := iso7064Mod97_10(iban.BankCode + iban.AccountNumber)
-		return iban.NationalChecksum == strconv.Itoa(check)
+		return iban.NationalChecksum == twoDigitStr(check)
 	},
 	// https://en.wikipedia.org/wiki/International_Bank_Account_Number#IBAN_formats_by_country
 	// https://www.ecbs.org/Download/Tr201v3.9.pdf (page 105)
@@ -152,7 +152,7 @@ var checksumFuncs = map[iso3166.Alpha2Code]func(IBAN) bool{
 	// https://www.ecbs.org/Download/Tr201v3.9.pdf (page 112)
 	iso3166.PT: func(iban IBAN) bool {
 		check := iso7064Mod97_10(iban.BankCode + iban.BranchCode + iban.AccountNumber)
-		return iban.NationalChecksum == uint8ToTwoDigitString(uint8(check))
+		return iban.NationalChecksum == twoDigitStr(check)
 	},
 	iso3166.SM: italy,
 	// https://en.wikipedia.org/wiki/International_Bank_Account_Number#IBAN_formats_by_country
@@ -160,14 +160,14 @@ var checksumFuncs = map[iso3166.Alpha2Code]func(IBAN) bool{
 	// ECBS once again says account number, but means bank code + account no.
 	iso3166.RS: func(iban IBAN) bool {
 		check := iso7064Mod97_10(iban.BankCode + iban.AccountNumber)
-		return iban.NationalChecksum == uint8ToTwoDigitString(uint8(check))
+		return iban.NationalChecksum == twoDigitStr(check)
 	},
 	iso3166.SK: czech,
 	// https://en.wikipedia.org/wiki/International_Bank_Account_Number#IBAN_formats_by_country
 	// https://www.ecbs.org/Download/Tr201v3.9.pdf (page 126)
 	iso3166.SI: func(iban IBAN) bool {
 		check := iso7064Mod97_10(iban.BankCode + iban.BranchCode + iban.AccountNumber)
-		return iban.NationalChecksum == uint8ToTwoDigitString(uint8(check))
+		return iban.NationalChecksum == twoDigitStr(check)
 	},
 	// https://en.wikipedia.org/wiki/International_Bank_Account_Number#IBAN_formats_by_country
 	// https://www.ecbs.org/Download/Tr201v3.9.pdf (page 131)
@@ -184,22 +184,6 @@ var checksumFuncs = map[iso3166.Alpha2Code]func(IBAN) bool{
 
 		return iban.NationalChecksum == string(rune('0'+check1))+string(rune('0'+check2))
 	},
-}
-
-// naming: concatenatedFields_algoName_complement
-
-func bankCodeBranchCodeAccountNumber00_iso7064Mod9710_98MinR(iban IBAN) bool {
-	check := iso7064Mod97_10(iban.BankCode + iban.BranchCode + iban.AccountNumber)
-	return iban.NationalChecksum == uint8ToTwoDigitString(uint8(check))
-}
-
-func bankCodeBranchCode_weighted3971_10MinR(iban IBAN) bool {
-	check := weighted(iban.BankCode+iban.BranchCode, 10, 3, 9, 7, 1)
-	if check != 0 {
-		check = 10 - check
-	}
-
-	return iban.NationalChecksum == string(rune('0'+check))
 }
 
 // https://en.wikipedia.org/wiki/International_Bank_Account_Number#National_check_digits
@@ -221,12 +205,11 @@ func czech(iban IBAN) bool {
 
 // https://en.wikipedia.org/wiki/International_Bank_Account_Number#National_check_digits
 // https://www.ecbs.org/Download/Tr201v3.9.pdf
-// ECBS is honestly not very clear, but Wikipedia works and we have sufficient
+// ECBS is honestly not very clear, but Wikipedia works, and we have sufficient
 // test cases that I am confident in the implementation.
 func france(iban IBAN) bool {
 	s := franceTransliterate(iban.BankCode + iban.BranchCode + iban.AccountNumber + iban.NationalChecksum)
-	check := baseISO7064Mod97_10(s)
-	return check == 0
+	return baseISO7064Mod97_10(s) == 0
 }
 
 func franceTransliterate(s string) string {
@@ -287,10 +270,13 @@ func italy(iban IBAN) bool {
 // ISO really made sure to gatekeep.
 // Only reliable source I could find is in German.
 // https://de.wikipedia.org/wiki/ISO/IEC_7064#Algorithmus_f%C3%BCr_reine_Systeme_mit_zwei_Pr%C3%BCfzeichen
+//
+//goland:noinspection GoSnakeCaseUsage
 func iso7064Mod97_10(s string) int {
 	return 98 - baseISO7064Mod97_10(s)
 }
 
+//goland:noinspection GoSnakeCaseUsage
 func baseISO7064Mod97_10(s string) int {
 	var prod int
 	for _, char := range s {
@@ -302,6 +288,8 @@ func baseISO7064Mod97_10(s string) int {
 
 // also from German Wikipedia
 // https://de.wikipedia.org/wiki/ISO/IEC_7064#Algorithmus_f%C3%BCr_hybride_Systeme
+//
+//goland:noinspection GoSnakeCaseUsage
 func iso7064Mod11_10(s string) int {
 	prod := 10
 	for _, r := range s {

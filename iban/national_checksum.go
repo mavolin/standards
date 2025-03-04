@@ -336,5 +336,5 @@ func luhn(s string) int {
 		sum = (sum + n) % 10
 	}
 
-	return 10 - sum%10
+	return (10 - sum%10) % 10
 }
